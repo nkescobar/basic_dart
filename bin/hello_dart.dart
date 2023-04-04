@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 void main() {
   var apodo = 'MakingAppers';
   String saludo = 'Hola $apodo';
@@ -69,7 +72,102 @@ void main() {
   //En Dart existe un tema muy interesante y son los futuros y los Streams
   //Podemos entender los futuros como un valor que se lo podremos obtener en un futuro,
   // Es similar a las promesas en  JavaScript
-  mostrarMensajeDelFuturo();
+  // mostrarMensajeDelFuturo();
+
+  var ages = [33, 15, 27, 40, 22, 19, 32, 76, 45];
+  ages.sort(); // ordena las edades de menor a mayor
+
+  var ageMin = ages.first; // obtiene la edad menor
+  var ageMax = ages.last; // obtiene la edad mayor
+  var ageAvg =
+      ages.reduce((a, b) => a + b) / ages.length; // calcula la edad promedio
+
+  print('La edad menor es: $ageMin');
+  print('La edad mayor es: $ageMax');
+  print('La edad promedio es: $ageAvg');
+  List<String> nombres = ['Juan', 'Maria', 'Pedro', 'Ana', 'Luis', 'Sofia'];
+
+  for (String nombre in nombres) {
+    int cantidadLetras = nombre.length;
+    String parImpar = (cantidadLetras % 2 == 0) ? 'par' : 'impar';
+    print(
+        '$nombre tiene $cantidadLetras letras y la cantidad de letras es $parImpar');
+  }
+  var listaDolares = [20000, 30000, 4000, 2500, 1000, 7600];
+
+  var convertir = Convertir(listaDolares: listaDolares);
+  convertir.proceso();
+}
+
+class Convertir {
+  List<int> listaDolares;
+
+  Convertir({
+    required this.listaDolares,
+  });
+
+  void proceso() {
+    var opcion;
+    do {
+      print('\n*** Menú ***');
+      print('C - Convertir a pesos colombianos');
+      print('D - Dejar en dólares');
+      print('E - Convertir a euros');
+      print('1 - Clasificar por ingresos');
+      print('2 - Mostrar información de ingresos');
+      print('X - Salir');
+      print('Ingrese una opción: ');
+      opcion = stdin.readLineSync()!;
+      switch (opcion.toUpperCase()) {
+        case 'C':
+          var listaPesos = listaDolares.map((dolar) => dolar * 4.773);
+          print('Lista en pesos colombianos: $listaPesos');
+          break;
+        case 'D':
+          print('Lista en dólares: $listaDolares');
+          break;
+        case 'E':
+          var listaEuros = listaDolares.map((dolar) => dolar * 0.92);
+          print('Lista en euros: $listaEuros');
+          break;
+        case '1':
+          var clasificacion = clasificarIngresos(listaDolares);
+          print('Clasificación por ingresos: $clasificacion');
+          break;
+        case '2':
+          var ingresoMaximo = listaDolares.reduce((a, b) => a > b ? a : b);
+          var ingresoMinimo = listaDolares.reduce((a, b) => a < b ? a : b);
+          var promedioIngresos =
+              listaDolares.reduce((a, b) => a + b) / listaDolares.length;
+          print('Ingreso más alto: $ingresoMaximo');
+          print('Ingreso más bajo: $ingresoMinimo');
+          print('Promedio de ingresos: $promedioIngresos');
+          break;
+        case 'X':
+          print('¡Adiós!');
+          break;
+        default:
+          print('Opción no válida');
+      }
+    } while (opcion.toUpperCase() != 'X');
+  }
+}
+
+String clasificarIngresos(List<int> ingresos) {
+  return ingresos
+      .map((ingreso) {
+        if (ingreso < 1000) {
+          return ' $ingreso ->  Ingreso bajo';
+        } else if (ingreso < 7000) {
+          return ' $ingreso -> Ingreso medio';
+        } else if (ingreso < 20000) {
+          return ' $ingreso -> Ingreso alto';
+        } else {
+          return ' $ingreso -> Ingreso elevado';
+        }
+      })
+      .toList()
+      .join(', ');
 }
 
 Future<void> mostrarMensajeDelFuturo() async {
